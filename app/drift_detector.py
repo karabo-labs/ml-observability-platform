@@ -19,7 +19,11 @@ def load_reference_stats() -> Optional[dict]:
     if not REFERENCE_STATS_FILE.exists():
         return None
     with open(REFERENCE_STATS_FILE) as f:
-        return json.load(f)
+        stats = json.load(f)
+    # Handle placeholder stats from CI (no training yet)
+    if stats.get("status") in ("pending_first_train", "no_reference"):
+        return None
+    return stats
 
 
 def compute_psi(expected_counts: list, actual_counts: list, epsilon: float = 1e-6) -> float:

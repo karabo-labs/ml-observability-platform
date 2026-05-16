@@ -10,30 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 
-[project.optional-dependencies]
-train = [
-    "torch>=2.0",
-    "transformers>=4.30",
-    "datasets>=2.12",
-    "scikit-learn>=1.2",
-    "evaluate>=0.4",
-    "huggingface-hub>=0.20",
-]
-app = [
-    "gradio>=4.0",
-    "transformers>=4.30",
-    "torch>=2.0",
-    "huggingface-hub>=0.20",
-    "plotly>=5.15",
-    "pandas>=2.0",
-    "numpy>=1.24",
-    "scipy>=1.10",
-]
-dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-    "ruff>=0.1",
-]
+# No packages to auto-discover — we use requirements.txt directly
+[tool.setuptools.packages.find]
+include = []
 
 [tool.ruff]
 line-length = 100

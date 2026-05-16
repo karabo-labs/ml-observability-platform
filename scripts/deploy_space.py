@@ -55,6 +55,7 @@ def main():
             folder_path=app_dir,
             path_in_repo=".",
             token=HF_TOKEN,
+            repo_type="space",
             commit_message="Deploy: update app from CI/CD",
             delete_patterns=["model/*.bin", "model/*.safetensors"],
         )

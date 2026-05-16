@@ -54,19 +54,22 @@ def test_detect_drift_insufficient_data():
 
 def test_detect_drift_normal():
     """Should detect normal (low drift) when distributions match."""
+    # Reference built from a well-calibrated model on balanced data:
+    # ~50% samples predicted negative → positive-class prob ~0.1 (bin 0-1)
+    # ~50% samples predicted positive → positive-class prob ~0.9 (bin 8-9)
     ref = {
         "class_proportions": {"positive": 0.5, "negative": 0.5},
-        "confidence_mean": 0.85,
-        "confidence_std": 0.1,
+        "confidence_mean": 0.89,
+        "confidence_std": 0.03,
         "prediction_histogram": {
-            "pos_counts": [0, 0, 0, 0, 0, 0, 0, 5, 10, 35],
-            "neg_counts": [0, 0, 0, 0, 0, 0, 0, 5, 10, 35],
+            "pos_counts": [20, 30, 0, 0, 0, 0, 0, 0, 30, 20],
+            "neg_counts": [20, 30, 0, 0, 0, 0, 0, 0, 30, 20],
             "pos_bins": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
             "neg_bins": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
         },
         "n_samples": 100,
     }
-    # High confidence predictions matching reference
+    # High confidence predictions with matching reference
     predictions = [
         {"confidence": 0.85 + (i % 5) * 0.02, "label": "POSITIVE" if i % 2 == 0 else "NEGATIVE"}
         for i in range(100)

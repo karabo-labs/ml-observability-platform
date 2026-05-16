@@ -81,10 +81,20 @@ def detect_drift(
     ref_conf_hist = reference_stats.get("prediction_histogram", {})
     ref_class_props = reference_stats.get("class_proportions", {})
     ref_conf_mean = reference_stats.get("confidence_mean", 0.5)
-
-    # 1. PSI on confidence distribution
     ref_pos_counts = ref_conf_hist.get("pos_counts", [0] * 10)
-    prod_pos_hist, _ = np.histogram(prod_confidences, bins=10, range=(0, 1))
+
+    # Convert production max-confidences to positive-class probabilities.
+    # During training, ref "pos_counts" = histogram of probs[:, 1] (positive
+    # class score) over the validation set. Production stores max-confidence
+    # per prediction, so we need to convert: for POSITIVE preds the positive-
+    # class prob = confidence; for NEGATIVE preds it = 1 - confidence.
+    prod_pos_probs = [
+        conf if label == "POSITIVE" else 1.0 - conf
+        for label, conf in zip(prod_labels, prod_confidences)
+    ]
+
+    # 1. PSI on positive-class probability distribution (like-with-like)
+    prod_pos_hist, _ = np.histogram(prod_pos_probs, bins=10, range=(0, 1))
     prod_pos_counts = prod_pos_hist.tolist()
 
     # Normalize to percentages
@@ -95,21 +105,20 @@ def detect_drift(
 
     psi = compute_psi(ref_pos_pct.tolist(), prod_pos_pct.tolist())
 
-    # 2. Confidence distribution shift (mean difference)
+    # 2. Confidence distribution shift (mean difference, still on max conf)
     confidence_shift = abs(np.mean(prod_confidences) - ref_conf_mean)
 
     # 3. Label distribution shift (class proportion change)
     ref_pos_ratio = ref_class_props.get("positive", 0.5)
     label_shift = abs(prod_pos_ratio - ref_pos_ratio)
 
-    # 4. KS test on confidence distributions
-    # Simulate reference confidences from histogram (approximate)
+    # 4. KS test on positive-class probability distributions
     ref_sample = []
     for i, count in enumerate(ref_pos_counts):
         bin_center = (i + 0.5) / 10
         ref_sample.extend([bin_center] * count)
     if len(ref_sample) > 10:
-        ks_stat, ks_pval = ks_2samp(ref_sample, prod_confidences)
+        ks_stat, ks_pval = ks_2samp(ref_sample, prod_pos_probs)
     else:
         ks_stat, ks_pval = 0.0, 1.0
 

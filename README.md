@@ -13,6 +13,21 @@
 
 ---
 
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="assets/inference-demo.png" alt="Inference Tab — Sentiment Analysis" width="420"/></td>
+      <td><img src="assets/monitor-demo.png" alt="Monitor Tab — Drift Dashboard" width="420"/></td>
+    </tr>
+    <tr>
+      <td align="center"><b>🔮 Inference Tab</b> — POSITIVE at 96.6% confidence</td>
+      <td align="center"><b>📊 Monitor Tab</b> — Drift detection dashboard</td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## 📊 Key Metrics
 
 | Metric | Value | Source |

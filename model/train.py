@@ -89,8 +89,8 @@ def main():
     tokenized.set_format("torch")
 
     # Split into train/eval
-    train_dataset = tokenized["train"].shuffle(seed=42).select(range(20000))  # subset for speed
-    eval_dataset = tokenized["test"].shuffle(seed=42).select(range(5000))
+    train_dataset = tokenized["train"].shuffle(seed=42).select(range(10000))  # subset for speed
+    eval_dataset = tokenized["test"].shuffle(seed=42).select(range(2500))
 
     # Training args
     print("\n[3/5] Configuring training")
@@ -101,7 +101,7 @@ def main():
         learning_rate=2e-5,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=32,
-        num_train_epochs=2,
+        num_train_epochs=1,
         weight_decay=0.01,
         logging_dir="logs",
         logging_steps=100,

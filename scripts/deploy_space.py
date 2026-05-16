@@ -31,15 +31,7 @@ def main():
         print(f"✅ Space found: {SPACE_ID} (SDK: {info.sdk if hasattr(info, 'sdk') else 'unknown'})")
     except Exception as e:
         print(f"\n❌ Space '{SPACE_ID}' not found on Hugging Face.")
-        print(f"\n👉 You need to create it manually first:")
-        print(f"   1. Go to https://huggingface.co/new-space")
-        print(f"   2. Owner: DynamicKarabo")
-        print(f"   3. Space Name: ml-observability")
-        print(f"   4. SDK: Gradio")
-        print(f"   5. Hardware: CPU basic (free)")
-        print(f"   6. Accept Spaces Terms")
-        print(f"   7. Click 'Create Space'")
-        print(f"\n   Then re-run this workflow.")
+        print(f"\n👉 Create it at https://huggingface.co/new-space")
         sys.exit(1)
 
     # Upload app directory

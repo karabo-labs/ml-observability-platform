@@ -16,12 +16,7 @@ jobs:
   # ─── Job 1: Train & Evaluate ───────────────────────────────────
   train:
     runs-on: ubuntu-latest
-    # Skip training on pure app/ changes to save time
-    if: |
-      github.event_name == 'schedule' ||
-      github.event_name == 'workflow_dispatch' ||
-      contains(join(github.event.commits.*.modified, ' '), 'model/') ||
-      contains(join(github.event.commits.*.added, ' '), 'model/')
+    if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v4
 

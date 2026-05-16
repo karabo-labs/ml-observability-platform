@@ -71,40 +71,37 @@ A complete MLOps lifecycle demo that shows you're not just a model trainer — y
 
 ### 3. Fork & Deploy
 
-**Option A: One-click** (recommended)
+**Step 1: Create the Hugging Face Space** (one-time)
 
-1. Clone this repo
-2. Push to your own GitHub repo
-3. Add your HF token as a repository secret:
+The CI/CD deploys to an existing Space — it doesn't create one. Make it manually:
+
+1. Go to [huggingface.co/new-space](https://huggingface.co/new-space)
+2. **Owner:** `DynamicKarabo`
+3. **Space Name:** `ml-observability`
+4. **SDK:** `Gradio`
+5. **Hardware:** `CPU basic` (free tier)
+6. Accept the Spaces Terms
+7. Click **Create Space**
+
+Done. Now CI can push files to it.
+
+**Step 2: Add your HF token to GitHub secrets**
 
 ```bash
 gh secret set HF_TOKEN -R your-username/ml-observability-platform
 ```
 
-Or add it manually in **Settings → Secrets and variables → Actions → New repository secret**:
+Or go to **Settings → Secrets and variables → Actions → New repository secret**:
 - **Name:** `HF_TOKEN`
 - **Value:** `hf_your_token_here`
 
-4. Push to `main` — the CI/CD pipeline runs automatically:
-   - Trains DistilBERT on IMDB (20k samples)
-   - Pushes model to `DynamicKarabo/sentiment-distilbert` (or your namespace)
-   - Deploys the Gradio app to HF Spaces
-   - Verifies the Space is running
+**Step 3: Push to trigger the pipeline**
 
-**Option B: Manual deploy**
-
-```bash
-# Train locally
-pip install -e ".[train]"
-python model/train.py
-
-# Push to HF Hub
-export HF_TOKEN=hf_your_token_here
-python model/push_to_hub.py
-
-# Deploy to HF Spaces
-python scripts/deploy_space.py
-```
+Push anything to `main` — the CI/CD pipeline runs automatically:
+- Trains DistilBERT on IMDB (20k samples)
+- Pushes model to `DynamicKarabo/sentiment-distilbert`
+- Deploys the Gradio app to your Space
+- Verifies the Space is running
 
 ## 🎯 Features
 

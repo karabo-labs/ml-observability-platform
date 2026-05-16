@@ -9,7 +9,7 @@ from pathlib import Path
 
 from huggingface_hub import HfApi, create_repo
 
-HUB_MODEL_ID = os.environ.get("HF_MODEL_ID", "DynamicKarabo/sentiment-distilbert")
+HUB_MODEL_ID = os.environ.get("HF_MODEL_ID", "karaboLLM/sentiment-distilbert")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 OUTPUT_DIR = Path("model_output")
 

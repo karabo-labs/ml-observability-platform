@@ -99,7 +99,7 @@ Or go to **Settings → Secrets and variables → Actions → New repository sec
 
 Push anything to `main` — the CI/CD pipeline runs automatically:
 - Trains DistilBERT on IMDB (20k samples)
-- Pushes model to `DynamicKarabo/sentiment-distilbert`
+- Pushes model to `karaboLLM/sentiment-distilbert`
 - Deploys the Gradio app to your Space
 - Verifies the Space is running
 
@@ -177,8 +177,8 @@ Set these environment variables to customize:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `HF_TOKEN` | — | Hugging Face write token (required) |
-| `HF_MODEL_ID` | `DynamicKarabo/sentiment-distilbert` | Model repo on Hub |
-| `HF_SPACE_ID` | `DynamicKarabo/ml-observability` | Space to deploy |
+| `HF_MODEL_ID` | `karaboLLM/sentiment-distilbert` | Model repo on Hub |
+| `HF_SPACE_ID` | `karaboLLM/ml-observability` | Space to deploy |
 
 ## 📊 Portfolio Impact
 

@@ -25,7 +25,7 @@ from drift_detector import detect_drift, load_reference_stats
 from prediction_store import get_predictions, log_prediction
 
 # ── Configuration ──────────────────────────────────────────────────
-MODEL_ID = os.environ.get("HF_MODEL_ID", "DynamicKarabo/sentiment-distilbert")
+MODEL_ID = os.environ.get("HF_MODEL_ID", "karaboLLM/sentiment-distilbert")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 MODEL_DIR = Path("model")
 

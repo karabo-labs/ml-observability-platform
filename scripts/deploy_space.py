@@ -12,7 +12,7 @@ except ImportError:
     os.system("pip install huggingface-hub>=0.20")
     from huggingface_hub import HfApi
 
-SPACE_ID = os.environ.get("HF_SPACE_ID", "DynamicKarabo/ml-observability")
+SPACE_ID = os.environ.get("HF_SPACE_ID", "karaboLLM/ml-observability")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 
 

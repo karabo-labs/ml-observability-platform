@@ -13,7 +13,7 @@ except ImportError:
     os.system("pip install huggingface-hub requests")
     from huggingface_hub import hf_hub_download, HfApi
 
-MODEL_ID = os.environ.get("HF_MODEL_ID", "DynamicKarabo/sentiment-distilbert")
+MODEL_ID = os.environ.get("HF_MODEL_ID", "karaboLLM/sentiment-distilbert")
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 OUTPUT_DIR = "app/model"
 

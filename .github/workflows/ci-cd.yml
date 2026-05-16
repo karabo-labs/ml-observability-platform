@@ -9,8 +9,8 @@ on:
 
 env:
   HF_TOKEN: ${{ secrets.HF_TOKEN }}
-  HF_MODEL_ID: DynamicKarabo/sentiment-distilbert
-  HF_SPACE_ID: DynamicKarabo/ml-observability
+  HF_MODEL_ID: karaboLLM/sentiment-distilbert
+  HF_SPACE_ID: karaboLLM/ml-observability
 
 jobs:
   # ─── Job 1: Train & Evaluate ───────────────────────────────────

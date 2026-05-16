@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+*.so
+
+# Model artifacts
+model_output/
+*.pt
+*.bin
+*.safetensors
+*.onnx
+
+# Data
+data/*.jsonl
+data/*.csv
+!data/.gitkeep
+
+# Environment
+.env
+.venv/
+venv/
+.huggingface/
+token
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

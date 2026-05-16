@@ -1,0 +1,109 @@
+name: MLOps Pipeline
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"  # Every Monday 6AM UTC — weekly retrain
+  workflow_dispatch:       # Manual trigger
+
+env:
+  HF_TOKEN: ${{ secrets.HF_TOKEN }}
+  HF_MODEL_ID: DynamicKarabo/sentiment-distilbert
+  HF_SPACE_ID: DynamicKarabo/ml-observability
+
+jobs:
+  # ─── Job 1: Train & Evaluate ───────────────────────────────────
+  train:
+    runs-on: ubuntu-latest
+    # Skip training on pure app/ changes to save time
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      contains(join(github.event.commits.*.modified, ' '), 'model/') ||
+      contains(join(github.event.commits.*.added, ' '), 'model/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install training dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[train]"
+
+      - name: Train model
+        run: python model/train.py
+
+      - name: Copy reference stats for tests
+        run: |
+          mkdir -p app/model
+          cp model_output/reference_stats.json app/model/
+
+      - name: Run tests
+        run: |
+          pip install -e ".[dev]"
+          pytest tests/ -v
+
+      - name: Push model to Hugging Face Hub
+        if: ${{ env.HF_TOKEN != '' }}
+        run: python model/push_to_hub.py
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-output
+          path: model_output/
+          retention-days: 7
+
+  # ─── Job 2: Deploy to HF Spaces ────────────────────────────────
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [train]
+    # Run even if train was skipped (app-only changes — still need to deploy)
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install deploy dependencies
+        run: pip install huggingface-hub>=0.20 requests
+
+      - name: Download model artifacts (if available)
+        uses: actions/download-artifact@v4
+        with:
+          name: model-output
+          path: model_output/
+        continue-on-error: true
+
+      - name: Sync reference stats for drift detection
+        run: python scripts/sync_reference_stats.py
+
+      - name: Deploy to Hugging Face Space
+        run: python scripts/deploy_space.py
+
+  # ─── Job 3: Health Check ───────────────────────────────────────
+  health-check:
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: success()
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install deps
+        run: pip install requests
+
+      - name: Check Space deployment status
+        run: python scripts/health_check.py

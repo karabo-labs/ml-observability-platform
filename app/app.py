@@ -31,19 +31,34 @@ MODEL_DIR = Path("model")
 
 # ── Load Model ─────────────────────────────────────────────────────
 print(f"📥 Loading model from {MODEL_ID}...")
-if not MODEL_DIR.exists():
-    MODEL_DIR.mkdir(parents=True)
-    snapshot_download(
-        repo_id=MODEL_ID,
-        local_dir=str(MODEL_DIR),
-        token=HF_TOKEN or None,
-        ignore_patterns=["*.bin", "optimizer.pt", "scheduler.pt"],
-    )
+REQUIRED_FILES = ["config.json", "tokenizer_config.json"]
+has_model = MODEL_DIR.exists() and all((MODEL_DIR / f).exists() for f in REQUIRED_FILES)
 
-tokenizer = AutoTokenizer.from_pretrained(str(MODEL_DIR))
-model = AutoModelForSequenceClassification.from_pretrained(str(MODEL_DIR))
-model.eval()
-print("✅ Model loaded successfully!")
+if not has_model:
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"   Downloading from Hugging Face Hub...")
+    try:
+        snapshot_download(
+            repo_id=MODEL_ID,
+            local_dir=str(MODEL_DIR),
+            token=HF_TOKEN or None,
+            ignore_patterns=["*.bin", "optimizer.pt", "scheduler.pt"],
+        )
+    except Exception as e:
+        print(f"⚠️ Could not download model from Hub: {e}")
+        print(f"   Model will be loaded after first training run completes.")
+
+# Check if model files exist
+if (MODEL_DIR / "config.json").exists():
+    tokenizer = AutoTokenizer.from_pretrained(str(MODEL_DIR))
+    model = AutoModelForSequenceClassification.from_pretrained(str(MODEL_DIR))
+    model.eval()
+    print("✅ Model loaded successfully!")
+else:
+    print("⚠️ No model files found. Space will be in setup mode until training completes.")
+    print(f"   Expected model at: https://huggingface.co/{MODEL_ID}")
+    tokenizer = None
+    model = None
 
 LABELS = ["NEGATIVE", "POSITIVE"]
 
@@ -53,6 +68,12 @@ def predict(text: str, progress=gr.Progress()):
     """Run inference on input text."""
     if not text or not text.strip():
         return "", 0.0, "Please enter some text."
+
+    if model is None or tokenizer is None:
+        return "", 0.0, (
+            "⚠️ Model not loaded yet. The training pipeline needs to complete first. "
+            "Once it does, restart the Space or wait for auto-reload."
+        )
 
     start = time.time()
     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=256)

@@ -96,7 +96,7 @@ def main():
     print("\n[3/5] Configuring training")
     training_args = TrainingArguments(
         output_dir=str(OUTPUT_DIR),
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         learning_rate=2e-5,
         per_device_train_batch_size=16,

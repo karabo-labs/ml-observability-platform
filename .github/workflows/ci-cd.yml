@@ -3,6 +3,11 @@ name: MLOps Pipeline
 on:
   push:
     branches: [main]
+    # Don't waste 80 min training on README/docs changes
+    paths-ignore:
+      - 'README.md'
+      - 'assets/**'
+      - '**.md'
   schedule:
     - cron: "0 6 * * 1"  # Every Monday 6AM UTC — weekly retrain
   workflow_dispatch:       # Manual trigger
@@ -20,7 +25,14 @@ jobs:
   # ─── Job 1: Train & Evaluate ───────────────────────────────────
   train:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    # Skip full training for app-only or script-only changes.
+    # Full training only runs when model code, CI config, or deps change.
+    if: |
+      github.event_name != 'push' ||
+      contains(join(github.event.commits.*.modified, ','), 'model/') ||
+      contains(join(github.event.commits.*.added, ','), 'model/') ||
+      contains(join(github.event.commits.*.modified, ','), '.github/') ||
+      contains(join(github.event.commits.*.modified, ','), 'pyproject.toml')
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +76,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [train]
-    # Run even if train was skipped (app-only changes — still need to deploy)
+    # Run regardless of whether train ran or was skipped
     if: always()
     steps:
       - uses: actions/checkout@v4

@@ -1,5 +1,7 @@
 # 🧠 ML Observability Platform
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github)](https://github.com/DynamicKarabo/ml-observability-platform)
+[![Last commit](https://img.shields.io/github/last-commit/DynamicKarabo/ml-observability-platform/main)](https://github.com/DynamicKarabo/ml-observability-platform)
 [![CI/CD Pipeline](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml)
 [![Space](https://img.shields.io/badge/🤗%20Space-Live-yellow)](https://huggingface.co/spaces/karaboLLM/ml-observability)
 [![Model](https://img.shields.io/badge/🤗%20Model-DistilBERT-blue)](https://huggingface.co/karaboLLM/sentiment-distilbert)

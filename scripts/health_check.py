@@ -9,7 +9,7 @@ import time
 import requests
 
 SPACE_ID = os.environ.get("HF_SPACE_ID", "karaboLLM/ml-observability")
-MAX_RETRIES = 12
+MAX_RETRIES = 24
 RETRY_DELAY = 15
 
 

@@ -1,6 +1,7 @@
 """
 Check HF Space deployment status after CI/CD deploy.
-Polls the HF API until the Space reaches RUNNING state.
+Polls the HF API until the Space reaches RUNNING state,
+then confirms the Gradio app is actually serving requests.
 """
 
 import os
@@ -9,8 +10,29 @@ import time
 import requests
 
 SPACE_ID = os.environ.get("HF_SPACE_ID", "karaboLLM/ml-observability")
-MAX_RETRIES = 24
+MAX_RETRIES = 48          # 48 × 15s = 12 min max (free tier builds can be slow)
 RETRY_DELAY = 15
+GRADIO_TIMEOUT = 60       # Extra time to wait for Gradio to serve after Space is RUNNING
+
+
+def check_gradio_ready(space_id: str, max_wait: int = GRADIO_TIMEOUT) -> bool:
+    """Hit the Gradio app root to confirm the app is actually serving."""
+    gradio_url = f"https://{space_id.replace('/', '-')}.hf.space/"
+    deadline = time.time() + max_wait
+
+    while time.time() < deadline:
+        try:
+            r = requests.get(gradio_url, timeout=10)
+            if r.status_code == 200:
+                print(f"   ✅ Gradio app responding (HTTP {r.status_code})")
+                return True
+            print(f"   ⏳ Gradio returned HTTP {r.status_code} — waiting...")
+        except requests.RequestException as e:
+            print(f"   ⏳ Gradio not ready yet: {e}")
+        time.sleep(5)
+
+    print(f"   ⚠️ Gradio did not respond within {max_wait}s")
+    return False
 
 
 def main():
@@ -27,9 +49,17 @@ def main():
                 print(f"⏳ Attempt {attempt}/{MAX_RETRIES}: status = {status}")
 
                 if status == "RUNNING":
-                    print(f"\n✅ Space is LIVE!")
-                    print(f"   https://huggingface.co/spaces/{SPACE_ID}")
-                    return
+                    print(f"\n✅ Space is RUNNING on HF API!")
+                    print(f"   Verifying Gradio app is serving...")
+                    if check_gradio_ready(SPACE_ID):
+                        print(f"\n✅ Space is LIVE!")
+                        print(f"   https://huggingface.co/spaces/{SPACE_ID}")
+                        return
+                    else:
+                        # Gradio didn't come up — don't fail here, but warn
+                        print(f"\n⚠️ Space API reports RUNNING but Gradio endpoint not responding.")
+                        print(f"   Check manually: https://huggingface.co/spaces/{SPACE_ID}")
+                        sys.exit(1)
                 elif status == "BUILD_ERROR":
                     print(f"\n❌ Space build failed. Check logs:")
                     print(f"   https://huggingface.co/spaces/{SPACE_ID}/logs")

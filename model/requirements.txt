@@ -4,6 +4,6 @@ accelerate>=1.1.0
 datasets>=2.12
 scikit-learn>=1.2
 evaluate>=0.4
-huggingface-hub>=0.20
+huggingface-hub>=0.20,<0.29
 numpy>=1.24
 scipy>=1.10

@@ -91,11 +91,11 @@ jobs:
         run: pip install huggingface-hub requests
 
       - name: Download model artifacts (if available)
+        if: needs.train.result == 'success'
         uses: actions/download-artifact@v4
         with:
           name: model-output
           path: model_output/
-        continue-on-error: true
 
       - name: Sync reference stats for drift detection
         run: python scripts/sync_reference_stats.py

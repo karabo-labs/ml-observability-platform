@@ -1,8 +1,8 @@
 # 🧠 ML Observability Platform
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github)](https://github.com/DynamicKarabo/ml-observability-platform)
-[![Last commit](https://img.shields.io/github/last-commit/DynamicKarabo/ml-observability-platform/main)](https://github.com/DynamicKarabo/ml-observability-platform)
-[![CI/CD Pipeline](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github)](https://github.com/karabo-labs/ml-observability-platform)
+[![Last commit](https://img.shields.io/github/last-commit/karabo-labs/ml-observability-platform/main)](https://github.com/karabo-labs/ml-observability-platform)
+[![CI/CD Pipeline](https://github.com/karabo-labs/ml-observability-platform/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/karabo-labs/ml-observability-platform/actions/workflows/ci-cd.yml)
 [![Space](https://img.shields.io/badge/🤗%20Space-Live-yellow)](https://huggingface.co/spaces/karaboLLM/ml-observability)
 [![Model](https://img.shields.io/badge/🤗%20Model-DistilBERT-blue)](https://huggingface.co/karaboLLM/sentiment-distilbert)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
@@ -372,7 +372,7 @@ health-check:
 
 ```bash
 # Clone and setup
-git clone https://github.com/DynamicKarabo/ml-observability-platform
+git clone https://github.com/karabo-labs/ml-observability-platform
 cd ml-observability-platform
 
 # Install app dependencies

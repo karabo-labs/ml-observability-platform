@@ -1,7 +1,7 @@
 # Case Study: ML Observability Platform — Sentiment Analysis with Real-Time Drift Monitoring
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github)](https://github.com/DynamicKarabo/ml-observability-platform)
-[![CI/CD Pipeline](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/DynamicKarabo/ml-observability-platform/actions/workflows/ci-cd.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github)](https://github.com/karabo-labs/ml-observability-platform)
+[![CI/CD Pipeline](https://github.com/karabo-labs/ml-observability-platform/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/karabo-labs/ml-observability-platform/actions/workflows/ci-cd.yml)
 [![Space](https://img.shields.io/badge/🤗%20Space-Live-yellow)](https://huggingface.co/spaces/karaboLLM/ml-observability)
 [![Model](https://img.shields.io/badge/🤗%20Model-DistilBERT-blue)](https://huggingface.co/karaboLLM/sentiment-distilbert)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
@@ -677,7 +677,7 @@ The project serves as the fourth installment in a 5-project MLOps progression po
 | Resource | URL |
 |----------|-----|
 | **Live Space** | https://huggingface.co/spaces/karaboLLM/ml-observability |
-| **GitHub Repository** | https://github.com/DynamicKarabo/ml-observability-platform |
+| **GitHub Repository** | https://github.com/karabo-labs/ml-observability-platform |
 | **Model on HF Hub** | https://huggingface.co/karaboLLM/sentiment-distilbert |
 | **DistilBERT Paper** | https://arxiv.org/abs/1910.01108 |
 | **Gradio Docs** | https://gradio.app/docs |

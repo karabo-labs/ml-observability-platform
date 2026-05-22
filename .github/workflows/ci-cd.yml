@@ -24,7 +24,7 @@ env:
 jobs:
   # ─── Job 1: Train & Evaluate ───────────────────────────────────
   train:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, hetzner]
     # Skip full training for app-only or script-only changes.
     # Full training only runs when model code, CI config, or deps change.
     if: |
